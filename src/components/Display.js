@@ -17,10 +17,19 @@ const styles = StyleSheet.create({
     displayValue: {
         fontSize: 60,
         color: '#000',
+    },
+    displaySecond: {
+        fontSize: 32,
+        color: '#000',
     }
 })
 
-export default props => 
+export default props => {
+    const stylesDisplay = [styles.displayValue] 
+    if (props.second) stylesDisplay.push(styles.displaySecond)
+    return (
     <View style={styles.display}>
-        <Text style={styles.displayValue} numberOfLines={1}>{props.value}</Text>
+        <Text style={stylesDisplay} numberOfLines={1}>{props.value}</Text>
     </View>
+    )
+}

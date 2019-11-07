@@ -17,17 +17,17 @@ const initialState = {
   operation: null,
   values: [0,0],
   current: 0,
-
+  expressao: ''
 }
 
 export default class App extends Component {
   state = {...initialState }
-
+  
   addDigito = n => {
     if (n === '.' && this.state.displayValue.includes('.')){
       return 
     }
-
+    
     // const clearDisplay = this.state.displayValue === '0'
     //   || this.state.clearDisplay 
     let clearDisplay = false
@@ -48,7 +48,7 @@ export default class App extends Component {
       const newValue = parseFloat(displayValue)
       const values = [...this.state.values]
       values[this.state.current] = newValue
-      this.setState({values})
+      this.setState({values, expressao: this.state.expressao + displayValue})
       console.log(values)
     }
   }
@@ -59,7 +59,8 @@ export default class App extends Component {
 
   setOperation = operation => {
     if (this.state.current === 0) {
-      this.setState({operation, current: 1, clearDisplay: true})
+      this.setState({operation, current: 1, clearDisplay: true, displayValue: '',
+      expressao: this.state.expressao + ' ' + operation + ' '})
       console.log(operation)
     } else {
       const equals = operation === '='
@@ -81,14 +82,28 @@ export default class App extends Component {
         current: equals ? 0 : 1,
         clearDisplay: true,
         values,
+        expressao: this.state.expressao + ' ' + operation + ' '
       })
     }
   }
 
   render() {
+    let second;
+
+      if(this.state.current === 1 ){ 
+        second = <Display second value={this.state.expressao}/>
+      }
     return (
+      
+
       <View style={styles.container}>
+        {second}
         <Display value={this.state.displayValue}/>
+        {/* { 
+          this.state.current === 1 
+          ? <Display second value={this.state.values[0]}/>
+          : <Display second value={}/> 
+        } */}
         <View style={styles.buttons}>
           <Button label='AC' triple onClick={this.clearMemory} />
           <Button label='/' operation onClick={this.setOperation}/>
